@@ -3,8 +3,8 @@
   "layer": "overlay",
   "position": "top",
   "height": 50,
-  "width": 320,
   "margin-top": -50,
+  "width": 100,
   "exclusive": false,
   "passthrough": false,
   "gtk-layer-shell": true,
@@ -13,19 +13,59 @@
   "modules-right": [],
   "group/notch-content": {
     "orientation": "vertical",
-    "modules": ["mpris", "group/stats", "group/controls"]
+    "modules": ["group/now-playing","group/wifi-bluetooth","group/controls","group/stats"]
+  },
+  "group/now-playing": {
+    "orientation": "horizontal",
+    "modules": ["image#albumart", "group/track-info", "pulseaudio"]
+  },
+  "group/track-info": {
+    "orientation": "vertical",
+    "modules": ["mpris", "custom/progress"]
   },
   "group/stats": {
     "orientation": "horizontal",
-    "modules": ["custom/weather", "custom/separator", "battery", "custom/separator", "cpu", "custom/separator", "memory"]
+    "modules": ["custom/weather", "cpu", "memory", "battery"]
+  },
+  "group/wifi-bluetooth": {
+    "orientation": "horizontal",
+    "modules": ["network", "bluetooth"]
   },
   "group/controls": {
     "orientation": "horizontal",
-    "modules": ["network", "custom/separator", "bluetooth", "custom/separator", "backlight", "custom/separator", "pulseaudio"]
+    "modules": ["custom/nightlight","backlight","custom/lock"]
   },
-  "custom/separator": {
-    "format": "·",
+  "image#albumart": {
+    "exec": "~/.config/waybar/notch/scripts/albumart.sh",
+    "size": 42,
+    "margin": 10,
+    "interval": 2,
     "tooltip": false
+  },
+  "custom/progress": {
+    "format": "{}",
+    "exec": "~/.config/waybar/notch/scripts/progress.sh",
+    "return-type": "json",
+    "interval": 1,
+    "tooltip": false,
+    "on-scroll-up": "",
+    "on-scroll-down": ""
+  },
+  "custom/lock": {
+    "format": "󰌾  Lock",
+    "tooltip": false,
+    "on-click": "omarchy-lock-screen",
+    "on-scroll-up": "",
+    "on-scroll-down": ""
+  },
+  "custom/nightlight": {
+    "format": "{}",
+    "exec": "~/.config/waybar/notch/scripts/nightlight.sh",
+    "return-type": "json",
+    "interval": 5,
+    "tooltip": false,
+    "on-click": "omarchy-toggle-nightlight",
+    "on-scroll-down": "playerctl volume 0.05-",
   },
   "mpris": {
     "format": "",
@@ -49,51 +89,78 @@
   },
   "custom/weather": {
     "format": "{}",
-    "exec": "curl -s 'wttr.in/?format=%c+%t' | tr -d '+'",
+    "exec": "~/.config/waybar/notch/scripts/weather.sh",
     "interval": 900,
-    "tooltip": false
+    "tooltip": false,
+    "on-scroll-up": "",
+    "on-scroll-down": ""
   },
   "battery": {
-    "format": "{icon} {capacity}%",
-    "format-charging": "󰂄 {capacity}%",
-    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "format": "{icon}  {capacity}%",
+    "format-charging": "󰂄  {capacity}%",
+    "format-plugged": "",
+    "format-icons": {
+      "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+    "format-full": "󰂅",
     "tooltip": false,
-    "interval": 30
+    "interval": 5,
+    "on-click": "omarchy-menu power",
+    "states": {
+      "warning": 20,
+      "critical": 10
+    },
+    "on-scroll-up": "",
+    "on-scroll-down": ""
   },
   "cpu": {
-    "format": "󰍛 {usage}%",
+    "format": "󰍛  {usage}%",
     "interval": 5,
-    "tooltip": false
+    "tooltip": false,
+    "on-click": "omarchy-launch-or-focus-tui btop",
+    "on-scroll-up": "",
+    "on-scroll-down": ""
   },
   "memory": {
-    "format": "󰘚 {percentage}%",
+    "format": "󰘚  {percentage}%",
     "interval": 10,
-    "tooltip": false
+    "tooltip": false,
+    "on-click": "omarchy-launch-or-focus-tui btop",
+    "on-scroll-up": "",
+    "on-scroll-down": ""
   },
   "network": {
-    "format-wifi": "󰖩 {essid}",
+    "format-wifi": "{icon}     {essid}",
     "format-ethernet": "󰈀 Wired",
     "format-disconnected": "󰖪 Off",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "tooltip": false,
-    "max-length": 16
+    "max-length": 16,
+    "spacing": 4,
+    "on-scroll-up": "",
+    "on-scroll-down": "",
+    "on-click": "omarchy-launch-wifi"
   },
   "bluetooth": {
-    "format-connected": "󰂱 {device_alias}",
+    "format-connected": "󰂱  {device_alias}",
     "format-on": "󰂯 On",
     "format-off": "󰂲 Off",
     "format-disabled": "󰂲 Off",
     "format-no-controller": "",
     "tooltip": false,
-    "max-length": 18
+    "on-scroll-up": "",
+    "on-scroll-down": "",
+    "on-click": "omarchy-launch-bluetooth"
   },
   "backlight": {
-    "format": "󰃟 {percent}%",
+    "format": "󰃟  {percent}%",
     "tooltip": false,
     "on-scroll-up": "brightnessctl set 5%+",
     "on-scroll-down": "brightnessctl set 5%-"
   },
   "pulseaudio": {
-    "format": "{icon} {volume}%",
+    "format": "{icon}  {volume}%",
     "format-muted": "󰝟 Muted",
     "format-icons": {
       "default": ["󰕿", "󰖀", "󰕾"]

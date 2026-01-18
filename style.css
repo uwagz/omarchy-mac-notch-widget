@@ -1,86 +1,180 @@
+@import "../../omarchy/current/theme/waybar.css";
+
 * {
   all: unset;
-  font-family: 'SF Pro Display', 'Inter', 'JetBrainsMono Nerd Font', sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  color: @foreground;
 }
 
 window {
   background: transparent;
 }
 
+/* DEFAULT STATE */
 #notch-content {
-  /* Invisible hover target */
-  min-width: 160px;
-  min-height: 50px;
-  padding: 10px 16px;
-  background: transparent;
-  opacity: 0;
-  transition: all 0.2s ease-out;
+
+  /* Hover target */
+  margin-top: -85px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background: #000;
+
+}
+
+#notch-content #now-playing {
+  min-height: 40px;
+}
+
+#notch-content #stats,
+#notch-content #controls {
+  padding: 12px 0px;
+}
+#notch-content #stats #custom-weather,
+#notch-content #stats #cpu,
+#notch-content #stats #memory,
+#notch-content #stats #battery,
+#notch-content #wifi-bluetooth #network,
+#notch-content #wifi-bluetooth #bluetooth,
+#notch-content #controls #backlight,
+#notch-content #controls #custom-lock,
+#notch-content #controls #custom-nightlight {
+  min-width: 80px;
 }
 
 #notch-content:hover {
-  /* Notch dropdown - control panel */
-  min-width: 300px;
-  padding: 44px 16px 14px 16px;
-  border-radius: 0 0 22px 22px;
-  background: black;
-  color: white;
-  opacity: 1;
+  margin-top: 0px;
+  padding: 48px 12px 16px 12px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border: 5px solid @background;
+}
+
+#notch-content:hover #wifi-bluetooth {
+  margin-top: 10px;
+}
+
+/*
+ * WIDTH CALCULATIONS:
+ * Using consistent gap of 6px between items
+ * All buttons have border: 1px (adds 2px total width per button)
+ * 
+ * Row width = 320px (fits content nicely)
+ *
+ * Wifi/Bluetooth (2 buttons):
+ *   Total = 2*width + 2*border(2px) + 1*gap(6px) = 320
+ *   2*width + 4 + 6 = 320
+ *   2*width = 310
+ *   width = 155px each
+ *
+ * Controls (3 buttons):
+ *   Total = 3*width + 3*border(2px) + 2*gap(6px) = 320
+ *   3*width + 6 + 12 = 320
+ *   3*width = 302
+ *   width = 100.67 → 100px each (leaves 2px slack)
+ */
+
+#notch-content:hover #wifi-bluetooth #network,
+#notch-content:hover #wifi-bluetooth #bluetooth {
+  min-width: 155px;
+}
+
+#notch-content:hover #stats #custom-weather,
+#notch-content:hover #stats #cpu,
+#notch-content:hover #stats #memory,
+#notch-content:hover #stats #battery {
+  min-width: 75px;
+}
+
+#notch-content:hover #controls #backlight,
+#notch-content:hover #controls #custom-lock,
+#notch-content:hover #controls #custom-nightlight {
+  min-width: 100px;
+}
+
+/* Button styling */
+#notch-content:hover #controls {
+  border-bottom: 1px solid @background;
+}
+
+#notch-content:hover #wifi-bluetooth #network,
+#notch-content:hover #wifi-bluetooth #bluetooth,
+#notch-content:hover #controls #backlight,
+#notch-content:hover #controls #custom-lock,
+#notch-content:hover #controls #custom-nightlight {
+  background: @background;
+  padding: 5px 0px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#notch-content:hover #wifi-bluetooth #network:hover,
+#notch-content:hover #wifi-bluetooth #bluetooth:hover,
+#notch-content:hover #controls #backlight:hover,
+#notch-content:hover #controls #custom-nightlight:hover {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Margins - using 6px gap consistently */
+#notch-content:hover #stats #custom-weather,
+#notch-content:hover #stats #cpu,
+#notch-content:hover #stats #memory {
+  margin-right: 6px;
+}
+
+#notch-content:hover #wifi-bluetooth #network {
+  margin-right: 6px;
+}
+
+#notch-content:hover #controls #custom-nightlight,
+#notch-content:hover #controls #backlight {
+  margin-right: 6px;
 }
 
 /* Now Playing - hero section */
-#mpris {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 12px 16px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  font-size: 12px;
+#notch-content:hover #now-playing {
+  background: @background;
+  border-radius: 5px;
+  padding: 5px 5px 5px 5px;
 }
 
-#mpris.playing {
-  background: rgba(255, 255, 255, 0.1);
+#notch-content:hover #now-playing #image {
+  min-width: 50px;
 }
 
-#mpris.paused {
+/* Track info (title + progress) */
+#notch-content:hover #track-info {
+  padding: 5px 0px 0px 20px;
+}
+
+#notch-content:hover #pulseaudio {
+  margin-left: 20px;
+  min-width: 60px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 1);
+}
+#notch-content:hover #track-info #mpris {
+  min-height: 15px;
+  min-width: 140px;
+}
+#notch-content:hover #mpris {
+  margin-bottom: 4px;
+}
+
+#notch-content:hover #mpris.paused {
   opacity: 0.7;
 }
 
-/* Stats row - system info */
-#stats {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 10px 14px;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  font-size: 11px;
+/* Progress bar */
+#notch-content:hover #custom-progress {
+  font-size: 9px;
+  opacity: 0.75;
+  min-width: 150px;
 }
 
-/* Controls row - adjustable settings */
-#controls {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 11px;
-}
-
-#custom-separator {
-  padding: 0 6px;
-  opacity: 0.25;
-  font-size: 8px;
-}
-
-#custom-weather {
-  font-size: 12px;
-}
-
-#battery, #cpu, #memory {
-  font-size: 11px;
-  opacity: 0.85;
-}
-
-#network, #bluetooth, #backlight, #pulseaudio {
-  font-size: 11px;
-  opacity: 0.85;
+#notch-content:hover #custom-progress.empty {
+  min-height: 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* Interactive elements - subtle hover */
@@ -108,4 +202,12 @@ window {
 
 #bluetooth.connected {
   color: #89b4fa;
+}
+
+#custom-nightlight:hover {
+  opacity: 1;
+}
+
+#custom-lock {
+  color: orange;
 }

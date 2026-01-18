@@ -1,0 +1,106 @@
+{
+  "reload_style_on_change": true,
+  "layer": "overlay",
+  "position": "top",
+  "height": 50,
+  "width": 320,
+  "margin-top": -50,
+  "exclusive": false,
+  "passthrough": false,
+  "gtk-layer-shell": true,
+  "modules-left": [],
+  "modules-center": ["group/notch-content"],
+  "modules-right": [],
+  "group/notch-content": {
+    "orientation": "vertical",
+    "modules": ["mpris", "group/stats", "group/controls"]
+  },
+  "group/stats": {
+    "orientation": "horizontal",
+    "modules": ["custom/weather", "custom/separator", "battery", "custom/separator", "cpu", "custom/separator", "memory"]
+  },
+  "group/controls": {
+    "orientation": "horizontal",
+    "modules": ["network", "custom/separator", "bluetooth", "custom/separator", "backlight", "custom/separator", "pulseaudio"]
+  },
+  "custom/separator": {
+    "format": "·",
+    "tooltip": false
+  },
+  "mpris": {
+    "format": "",
+    "format-playing": "{artist} - {title}",
+    "format-paused": "󰏤  {artist} - {title}",
+    "format-stopped": "",
+    "tooltip": false,
+    "player": "playerctld",
+    "max-length": 35,
+    "title-len": 20,
+    "artist-len": 12,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next",
+    "on-click-middle": "playerctl previous",
+    "on-scroll-up": "playerctl volume 0.05+",
+    "on-scroll-down": "playerctl volume 0.05-",
+    "status-icons": {
+      "paused": "󰏤",
+      "playing": "󰐊"
+    }
+  },
+  "custom/weather": {
+    "format": "{}",
+    "exec": "curl -s 'wttr.in/?format=%c+%t' | tr -d '+'",
+    "interval": 900,
+    "tooltip": false
+  },
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "tooltip": false,
+    "interval": 30
+  },
+  "cpu": {
+    "format": "󰍛 {usage}%",
+    "interval": 5,
+    "tooltip": false
+  },
+  "memory": {
+    "format": "󰘚 {percentage}%",
+    "interval": 10,
+    "tooltip": false
+  },
+  "network": {
+    "format-wifi": "󰖩 {essid}",
+    "format-ethernet": "󰈀 Wired",
+    "format-disconnected": "󰖪 Off",
+    "tooltip": false,
+    "max-length": 16
+  },
+  "bluetooth": {
+    "format-connected": "󰂱 {device_alias}",
+    "format-on": "󰂯 On",
+    "format-off": "󰂲 Off",
+    "format-disabled": "󰂲 Off",
+    "format-no-controller": "",
+    "tooltip": false,
+    "max-length": 18
+  },
+  "backlight": {
+    "format": "󰃟 {percent}%",
+    "tooltip": false,
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 Muted",
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"]
+    },
+    "tooltip": false,
+    "on-scroll-up": "pamixer -i 5",
+    "on-scroll-down": "pamixer -d 5",
+    "on-click": "pamixer -t"
+  }
+}

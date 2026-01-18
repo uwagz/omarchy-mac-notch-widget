@@ -29,6 +29,13 @@ window {
 #notch-content #controls {
   padding: 12px 0px;
 }
+
+/* Hide for screenshots etc */
+#notch-content #stats #cpu,
+#notch-content #stats #memory {
+  opacity: 0;
+}
+
 #notch-content #stats #custom-weather,
 #notch-content #stats #cpu,
 #notch-content #stats #memory,
@@ -85,6 +92,10 @@ window {
   min-width: 75px;
 }
 
+#notch-content:hover #stats #cpu,
+#notch-content:hover #stats #memory {
+  opacity: 1;
+}
 #notch-content:hover #controls #backlight,
 #notch-content:hover #controls #custom-lock,
 #notch-content:hover #controls #custom-nightlight {
